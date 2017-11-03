@@ -33,7 +33,24 @@ export default {}
     width: 30px;
     height: 32px;
     .bg-image(logo);
+    background-size: 30px 32px;
+  }
+  .text {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 44px;
+    font-size: 18px;
+  }
+  .mine {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    .icon-mine {
+      display: block;
+      padding: 12px;
+      font-size: 20px;
+      color: #ffcd32;
+    }
   }
 }
 </style>
-
