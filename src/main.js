@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 import fastclick from 'fastclick'
 
-import '../common/less/reset.less'
+import 'common/less/reset.less'
 
 fastclick.attach(document.body)
 
