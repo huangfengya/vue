@@ -1,5 +1,7 @@
 import axios from 'common/js/axios'
-import { commonParams } from './config'
+import {
+  commonParams
+} from './config'
 
 export function getRecommend() {
   const url = 'qq/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'

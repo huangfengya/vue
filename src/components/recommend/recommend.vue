@@ -1,14 +1,23 @@
 <template>
-  <div>
-     推荐
+  <div class="recommend">
+    <div class="banner">
+      <slider :listImg="listImg"></slider>
+    </div>
   </div>
 </template>
 
 <script>
 import { getRecommend } from 'api/recommend'
 import { ERR_OK } from 'api/config'
+import Slider from 'base/slider/slider'
 
 export default {
+  data() {
+    return {
+      listImg: [],
+      hotSong: []
+    }
+  },
   created() {
     this._getRecommend()
   },
@@ -16,10 +25,16 @@ export default {
     _getRecommend() {
       getRecommend().then(res => {
         if (res.data.code === ERR_OK) {
-          console.log(res)
+          this.listImg = res.data.data.slider
+          this.hotSong = res.data.data.songList
+          console.log(this.hotSong)
         }
       })
     }
+  },
+
+  components: {
+    Slider
   }
 }
 </script>
