@@ -8,7 +8,8 @@ export function getRecommend() {
   const param = Object.assign({}, commonParams, {
     platform: 'h5',
     uin: 0,
-    needNewCode: 1
+    needNewCode: 1,
+    format: 'json'
   })
   return axios(url, param, 'GET')
 }

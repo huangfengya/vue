@@ -31,7 +31,8 @@ export default {
         autoplay: 3000,
         loop: true,
         pagination: '.swiper-pagination',
-        autoplayDisableOnInteraction: false
+        autoplayDisableOnInteraction: false,
+        paginationClickable: true
       })
     }
   }
