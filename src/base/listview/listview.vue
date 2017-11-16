@@ -26,27 +26,24 @@ export default {
     }
   },
   data() {
-    return {
-
-    }
+    return {}
   },
-  mounted() { },
+  mounted() {},
   methods: {
     selectItem(item) {
       this.$emit('select', item)
     },
     jump(index) {
       let jump = document.querySelectorAll('.yangxin')
-      let top = jump[index].offsetTop
+      let top = jump[index].offsetTop - jump[0].offsetTop
       let ctop = document.getElementsByClassName('all')[0].scrollTop
 
       let step = Math.abs(ctop - top) / 20
-      console.log(step)
 
       top > ctop ? smoothDown() : smoothUp()
 
       function smoothDown() {
-        if (top > ctop + 110) {
+        if (top > ctop) {
           ctop += step
           document.getElementsByClassName('all')[0].scrollTop = ctop
           setTimeout(smoothDown, 10)
@@ -55,7 +52,7 @@ export default {
         }
       }
       function smoothUp() {
-        if (top < ctop + 110) {
+        if (top < ctop) {
           ctop -= step
           document.getElementsByClassName('all')[0].scrollTop = ctop
           setTimeout(smoothUp, 10)
@@ -77,8 +74,8 @@ export default {
 
 <style lang="less">
 .listview {
-  width: 76%;
-  padding: 5%;
+  width: 80%;
+  margin: 5%;
   overflow: hidden;
   .all {
     width: 86vw;
