@@ -42,7 +42,6 @@ export default {
         if (res.data.code === ERR_OK) {
           this.listImg = res.data.data.slider
           this.hotSong = res.data.data.songList
-          console.log(this.hotSong)
         }
       })
     },
