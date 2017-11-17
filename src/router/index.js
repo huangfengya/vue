@@ -8,6 +8,7 @@ const Recommend = () => import('components/recommend/recommend')
 const Singer = () => import('components/singer/singer')
 const Rank = () => import('components/rank/rank')
 const Search = () => import('components/search/search')
+const SingerDetail = () => import('components/singer-detail/singer-detail')
 
 export default new Router({
   routes: [
@@ -24,7 +25,14 @@ export default new Router({
     {
       path: '/singer',
       name: 'Singer',
-      component: Singer
+      component: Singer,
+      children: [
+        {
+          path: ':id',
+          name: 'SingerDetail',
+          component: SingerDetail
+        }
+      ]
     },
     {
       path: '/rank',
