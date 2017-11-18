@@ -1,7 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="singer-detail">
-    </div>
+    <div class="singer-detail"></div>
   </transition>
 </template>
 
@@ -19,8 +18,6 @@ export default {
   },
   created() {
     this._getDetail()
-    this._normalizeSongs()
-    console.log(this.singer)
   },
   methods: {
     _getDetail() {
@@ -38,11 +35,11 @@ export default {
       let ret = []
       list.forEach(item => {
         let { musicData } = item
-        console.log(item)
         if (musicData.songid && musicData.albummid) {
           ret.push(createSong(musicData))
         }
       })
+      return ret
     }
   },
   computed: {
