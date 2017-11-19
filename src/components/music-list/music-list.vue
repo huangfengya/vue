@@ -30,5 +30,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.music-list{
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  bottom: 0px;
+  background: #fff;
+}
 </style>
