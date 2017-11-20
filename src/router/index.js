@@ -13,6 +13,10 @@ const SingerDetail = () => import('components/singer-detail/singer-detail')
 export default new Router({
   routes: [
     {
+      path: '/',
+      redirect: '/recommend'
+    },
+    {
       path: '/user',
       name: 'UserCenter',
       component: UserCenter

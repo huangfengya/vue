@@ -26,12 +26,19 @@ export default {
     lunbo() {
       /* eslint-disable no-unused-vars */
       var swiper = new Swiper('.swiper-container', {
+        effect: 'coverflow',
+        slidesPerView: 2,
+        centeredSlides: true,
+        coverflow: {
+          rotate: 0,
+          depth: 500
+        },
         speed: 300,
         observer: true,
-        autoplay: 3000,
+        // autoplay: 3000,
         loop: true,
         pagination: '.swiper-pagination',
-        autoplayDisableOnInteraction: false,
+        // autoplayDisableOnInteraction: false,
         paginationClickable: true
       })
     }
