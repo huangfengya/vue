@@ -49,9 +49,7 @@ export default {
     bgImage() {
       return this.singer.pic
     },
-    ...mapGetters([
-      'singer'
-    ])
+    ...mapGetters(['singer'])
   },
   components: {
     MusicList
@@ -62,14 +60,13 @@ export default {
 <style lang="less">
 .slide-enter-active,
 .slide-leave-active {
-  transition: all .3s linear;
+  transition: all 0.3s linear;
 }
 
 .slide-enter {
   transform: translate3d(100%, 0, 0);
 }
-
-.slide-leave {
-  transform: scale(0);
+.slide-leave-to {
+  transform: scale3d(0, 0, 0);
 }
 </style>

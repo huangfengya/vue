@@ -8,14 +8,15 @@
       <div class="play">随机播放</div>
     </div>
     <div class="songlist">
-      <base-list :songs="songs"></base-list>
+      <song-list :songs="songs" @select="selectItem"></song-list>
     </div>
 
   </div>
 </template>
 
 <script>
-import BaseList from 'base/song-list/song-list'
+import SongList from 'base/song-list/song-list'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -35,7 +36,14 @@ export default {
   methods: {
     back() {
       this.$router.back()
-    }
+    },
+    selectItem(song, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+    },
+    ...mapActions(['selectPlay'])
   },
   computed: {
     bgImg() {
@@ -43,7 +51,7 @@ export default {
     }
   },
   components: {
-    BaseList
+    SongList
   }
 }
 </script>
@@ -63,7 +71,7 @@ export default {
     padding: 3px;
     line-height: 20px;
     z-index: 9999;
-    i{
+    i {
       display: block;
       width: 26px;
       line-height: 26px;
