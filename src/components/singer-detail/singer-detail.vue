@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list :songs="songs" ></music-list>
+    <music-list :songs="songs" :title="title" :bgImage="bgImage"></music-list>
   </transition>
 </template>
 
@@ -28,7 +28,6 @@ export default {
       getSingerDetail(this.singer.id).then(res => {
         if (res.code === ERR_OK) {
           this.songs = this._normalizeSongs(res.data.list)
-          console.log(this.songs)
         }
       })
     },
@@ -63,11 +62,14 @@ export default {
 <style lang="less">
 .slide-enter-active,
 .slide-leave-active {
-  transition: all .3s;
+  transition: all .3s linear;
 }
 
-.slide-enter,
+.slide-enter {
+  transform: translate3d(100%, 0, 0);
+}
+
 .slide-leave {
-  transform: translate3d(100%, 0, 0)
+  transform: scale(0);
 }
 </style>
