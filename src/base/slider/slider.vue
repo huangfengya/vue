@@ -19,27 +19,36 @@ export default {
   props: ['listImg'],
 
   mounted() {
-    this.lunbo()
+    // this.$nextTick(() => {
+    //   this.lunbo()
+    // })
   },
 
   methods: {
     lunbo() {
       /* eslint-disable no-unused-vars */
       var swiper = new Swiper('.swiper-container', {
-        effect: 'coverflow',
-        slidesPerView: 2,
+        // effect: 'coverflow',
+        // slidesPerView: 2,
         centeredSlides: true,
-        coverflow: {
-          rotate: 0,
-          depth: 500
-        },
+        // coverflow: {
+        //   rotate: 0,
+        //   depth: 500
+        // },
         speed: 300,
-        observer: true,
+        // observer: true,
         // autoplay: 3000,
         loop: true,
         pagination: '.swiper-pagination',
         // autoplayDisableOnInteraction: false,
         paginationClickable: true
+      })
+    }
+  },
+  watch: {
+    listImg() {
+      this.$nextTick(() => {
+        this.lunbo()
       })
     }
   }

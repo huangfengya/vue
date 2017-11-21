@@ -42,6 +42,7 @@ export default {
         list: this.songs,
         index
       })
+      console.log('asdfadf:' + index)
     },
     ...mapActions(['selectPlay'])
   },
