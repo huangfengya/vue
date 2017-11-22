@@ -11,5 +11,5 @@ export const selectPlay = function ({
   commit(types.SET_PLAYLIST, list)
   commit(types.SET_CUREEN_INDEX, index)
   commit(types.SET_FULL_SCREEN, true)
-  commit(types.SET_PLAY_MODE, true)
+  commit(types.SET_PLAYING, true)
 }

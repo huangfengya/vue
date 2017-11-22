@@ -24,7 +24,6 @@ export default {
       return `${song.singer} · ${song.album}`
     },
     select(song, index) {
-      console.log(index)
       this.$emit('select', song, index)
     }
   }
