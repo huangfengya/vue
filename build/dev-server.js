@@ -13,6 +13,9 @@ const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./webpack.dev.conf')
 
+// 此处引入axios
+const axios = require('axios')
+
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port
 // automatically open browser, if not set will be false
@@ -22,6 +25,35 @@ const autoOpenBrowser = !!config.dev.autoOpenBrowser
 const proxyTable = config.dev.proxyTable
 
 const app = express()
+
+var apiRouter = express.Router()
+apiRouter.get('/lyric', function(req, res) {
+  var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg'
+
+  axios.get(url, {
+    headers: {
+      Referer: 'https://c.y.qq.com/',
+      host: 'c.y.qq.com'
+    },
+    params: req.query
+  }).then((response) => {
+    var ret = response.data
+    if (typeof ret === 'string'){
+      var reg = /^\w+\(({[^()]+})\)$/
+      var mathes = ret.match(reg)
+      if(mathes){
+        ret = JSON.parse(mathes[1])
+      }
+    }
+    
+    res.json(ret)
+  }).catch(e=>{
+    console.log(e)
+  })
+})
+
+app.use('/api', apiRouter)
+
 const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {

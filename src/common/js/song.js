@@ -1,3 +1,7 @@
+import {
+  getLyic
+} from 'api/song'
+
 export default class Song {
   constructor({
     id,
@@ -17,6 +21,16 @@ export default class Song {
     this.duration = duration
     this.image = image
     this.url = url
+  }
+
+  _getLyic() {
+    return new Promise((resolve, reject) => {
+      getLyic(this.mid).then(res => {
+        resolve(res)
+      }).catch(e => {
+        reject(e)
+      })
+    })
   }
 }
 

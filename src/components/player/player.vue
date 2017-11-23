@@ -23,12 +23,12 @@
           <div class="progress-wrapper">
             <span class="time time-l" v-text="format(currentTime)"></span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent"></progress-bar>
+              <progress-bar :percent="percent" @percentChange="onPercentChange"></progress-bar>
             </div>
             <span class="time time-r" v-text="format(currentSong.duration)"></span>
           </div>
           <div class="operators">
-            <span class="model">模</span>
+            <span class="model" @click="changeMode" v-text="PlayMode"></span>
             <span class="prev" @click="prev">上</span>
             <span class="stop" @click="togglePlaying" v-text="state"></span>
             <span class="next" @click="next">下</span>
@@ -49,25 +49,31 @@
           </div>
         </div>
         <div class="list">
-          <p v-text="state" @click.stop="togglePlaying"></p>
+          <progress-circle :percent="percent">
+            <p class="stop_mini" v-text="state" @click.stop="togglePlaying"></p>
+          </progress-circle>
           <p>表</p>
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="timeUpdate"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="timeUpdate" @ended="ended"></audio>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import ProgressBar from 'base/progress-bar/progress-bar'
+import ProgressCircle from 'base/progress-circle/progress-circle'
+import { playMode } from 'common/js/config'
+import { shuffer } from 'common/js/util'
 
 export default {
   data() {
     return {
       state: '停',
       songReady: false,
-      currentTime: 0
+      currentTime: 0,
+      PlayMode: '顺'
     }
   },
   methods: {
@@ -113,6 +119,17 @@ export default {
     error() {
       this.songReady = true
     },
+    ended() {
+      if (this.mode === playMode.loop) {
+        this.loop()
+      } else {
+        this.next()
+      }
+    },
+    loop() {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
+    },
     timeUpdate(e) {
       this.currentTime = e.target.currentTime
     },
@@ -122,6 +139,19 @@ export default {
       const second = this._pad(interval % 60)
       return `${minute}:${second}`
     },
+    changeMode() {
+      const mode = (this.mode + 1) % 3
+      this.setMode(mode)
+
+      let list = null
+      if (this.mode === playMode.random) {
+        list = shuffer(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+      this._resetCurrentIndex(list)
+      this.setPlayList(list)
+    },
     _pad(num, n = 2) {
       let len = num.toString().length
       while (len < n) {
@@ -130,10 +160,22 @@ export default {
       }
       return num
     },
+    _resetCurrentIndex(list) {
+      let index = list.findIndex((item) => {
+        return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex(index)
+    },
+    onPercentChange(percent) {
+      this.$refs.audio.currentTime = this.currentSong.duration * percent
+      if (!this.playing) this.togglePlaying()
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING',
-      setCurrentIndex: 'SET_CUREEN_INDEX'
+      setCurrentIndex: 'SET_CUREEN_INDEX',
+      setMode: 'SET_PLAY_MODE',
+      setPlayList: 'SET_PLAYLIST'
     })
   },
   computed: {
@@ -143,12 +185,15 @@ export default {
     percent() {
       return this.currentTime / this.currentSong.duration
     },
-    ...mapGetters(['fullScreen', 'playList', 'currentSong', 'playing', 'currentIndex'])
+    ...mapGetters(['fullScreen', 'playList', 'currentSong', 'playing', 'currentIndex', 'mode', 'sequenceList'])
   },
   watch: {
-    currentSong() {
+    currentSong(newSong, oldSong) {
+      if (newSong.id === oldSong.id) return
+
       this.$nextTick(() => {
         this.$refs.audio.play()
+        this.currentSong._getLyic()
       })
     },
     playing(newPlaying) {
@@ -162,10 +207,22 @@ export default {
           this.state = '播'
         }
       })
+    },
+    mode(m) {
+      this.$nextTick(() => {
+        if (m === playMode.sequence) {
+          this.PlayMode = '顺'
+        } else if (m === playMode.loop) {
+          this.PlayMode = '循'
+        } else {
+          this.PlayMode = '随'
+        }
+      })
     }
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    ProgressCircle
   }
 }
 </script>
@@ -368,6 +425,11 @@ export default {
       justify-content: center;
       p {
         padding: 10px;
+      }
+      .stop_mini {
+        position: absolute;
+        top: -2px;
+        left: -1px;
       }
     }
     &.mini-enter-active,

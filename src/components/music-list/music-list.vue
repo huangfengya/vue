@@ -5,7 +5,7 @@
     </div>
     <h1 class="title">{{title}}</h1>
     <div class="bg-image" :style="bgImg">
-      <div class="play">随机播放</div>
+      <div class="play" @click="random">随机播放</div>
     </div>
     <div class="songlist">
       <song-list :songs="songs" @select="selectItem"></song-list>
@@ -43,7 +43,10 @@ export default {
         index
       })
     },
-    ...mapActions(['selectPlay'])
+    random() {
+      this.randomPlay({ list: this.songs })
+    },
+    ...mapActions(['selectPlay', 'randomPlay'])
   },
   computed: {
     bgImg() {
