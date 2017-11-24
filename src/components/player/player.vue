@@ -18,6 +18,9 @@
               </div>
             </div>
           </div>
+          <div class="middle-B" v-if="currentLyric">
+            <p v-for="(lrc,index) in currentLyric.lines" :class="{'lyric': currentLineNum === index}" v-html="lrc.txt"></p>
+          </div>
         </div>
         <div class="bottom">
           <div class="progress-wrapper">
@@ -66,6 +69,7 @@ import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import { playMode } from 'common/js/config'
 import { shuffer } from 'common/js/util'
+import Lyric from 'common/js/lyric-parse'
 
 export default {
   data() {
@@ -73,7 +77,9 @@ export default {
       state: '停',
       songReady: false,
       currentTime: 0,
-      PlayMode: '顺'
+      PlayMode: '顺',
+      currentLyric: null,
+      currentLineNum: 0
     }
   },
   methods: {
@@ -132,6 +138,14 @@ export default {
     },
     timeUpdate(e) {
       this.currentTime = e.target.currentTime
+
+      if (!this.currentLyric.lines) return
+      for (let i = 0; i < this.currentLyric.lines.length; i++) {
+        if (this.currentLyric.lines[i].time > this.currentTime * 1000 | 0) {
+          this.currentLineNum = !i ? 0 : i - 1
+          break
+        }
+      }
     },
     format(interval) {
       interval = interval | 0
@@ -170,6 +184,12 @@ export default {
       this.$refs.audio.currentTime = this.currentSong.duration * percent
       if (!this.playing) this.togglePlaying()
     },
+    _getLyric() {
+      this.currentSong._getLyric().then((res) => {
+        this.currentLyric = new Lyric(res.data.lyric)
+        console.log(this.currentLyric)
+      })
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING',
@@ -193,7 +213,7 @@ export default {
 
       this.$nextTick(() => {
         this.$refs.audio.play()
-        this.currentSong._getLyic()
+        this._getLyric()
       })
     },
     playing(newPlaying) {
@@ -314,6 +334,22 @@ export default {
             &.pause {
               animation-play-state: paused;
             }
+          }
+        }
+      }
+      .middle-B {
+        position: absolute;
+        bottom: 8vh;
+        height: 20vh;
+        width: 100%;
+        overflow: scroll;
+        p {
+          text-align: center;
+          font-size: 14px;
+          line-height: 25px;
+          color: snow;
+          &.lyric {
+            color: #ff366d;
           }
         }
       }

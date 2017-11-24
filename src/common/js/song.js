@@ -1,5 +1,5 @@
 import {
-  getLyic
+  getLyric
 } from 'api/song'
 
 export default class Song {
@@ -23,9 +23,9 @@ export default class Song {
     this.url = url
   }
 
-  _getLyic() {
+  _getLyric() {
     return new Promise((resolve, reject) => {
-      getLyic(this.mid).then(res => {
+      getLyric(this.mid).then(res => {
         resolve(res)
       }).catch(e => {
         reject(e)

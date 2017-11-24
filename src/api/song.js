@@ -3,7 +3,7 @@ import {
   commonParams
 } from './config'
 
-export function getLyic(mid) {
+export function getLyric(mid) {
   const url = '/api/lyric'
   const data = Object.assign({}, commonParams, {
     songmid: mid,
