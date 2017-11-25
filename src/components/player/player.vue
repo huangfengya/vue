@@ -139,7 +139,7 @@ export default {
     timeUpdate(e) {
       this.currentTime = e.target.currentTime
 
-      if (!this.currentLyric.lines) return
+      if (!this.currentLyric) return
       for (let i = 0; i < this.currentLyric.lines.length; i++) {
         if (this.currentLyric.lines[i].time > this.currentTime * 1000 | 0) {
           this.currentLineNum = !i ? 0 : i - 1
@@ -187,7 +187,6 @@ export default {
     _getLyric() {
       this.currentSong._getLyric().then((res) => {
         this.currentLyric = new Lyric(res.data.lyric)
-        console.log(this.currentLyric)
       })
     },
     ...mapMutations({
@@ -238,6 +237,11 @@ export default {
           this.PlayMode = '随'
         }
       })
+    },
+    currentLineNum: {
+      handler: () => {
+        document.getElementsByClassName('middle-B')[0].scrollTop = document.getElementsByClassName('lyric')[0].offsetTop - 25
+      }
     }
   },
   components: {
@@ -319,7 +323,14 @@ export default {
           width: 270px;
           height: 270px;
           border-radius: 50%;
-          background: radial-gradient(#fff 0%, #000 90%, snow 93%, #000 96%, #ccc 99%, #000 100%);
+          background: radial-gradient(
+            #fff 0%,
+            #000 90%,
+            snow 93%,
+            #000 96%,
+            #ccc 99%,
+            #000 100%
+          );
           .cd {
             width: 90%;
             height: 90%;
@@ -340,7 +351,7 @@ export default {
       .middle-B {
         position: absolute;
         bottom: 8vh;
-        height: 20vh;
+        height: 18vh;
         width: 100%;
         overflow: scroll;
         p {
@@ -470,7 +481,7 @@ export default {
     }
     &.mini-enter-active,
     &.mini-leave-active {
-      transition: all .3s linear;
+      transition: all 0.3s linear;
     }
     &.mini-enter,
     &.mini-mini-to {
@@ -478,13 +489,12 @@ export default {
     }
   }
 }
-
 @keyframes rotate {
   from {
-    transform: rotate(0deg)
+    transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg)
+    transform: rotate(360deg);
   }
 }
 </style>

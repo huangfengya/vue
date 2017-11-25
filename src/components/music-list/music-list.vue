@@ -7,7 +7,7 @@
     <div class="bg-image" :style="bgImg">
       <div class="play" @click="random">随机播放</div>
     </div>
-    <div class="songlist">
+    <div class="songlist" ref="songList">
       <song-list :songs="songs" @select="selectItem"></song-list>
     </div>
 
@@ -17,8 +17,10 @@
 <script>
 import SongList from 'base/song-list/song-list'
 import { mapActions } from 'vuex'
+import { playListMixin } from 'common/js/mixin'
 
 export default {
+  mixins: [playListMixin],
   props: {
     bgImage: {
       type: String,
@@ -45,6 +47,10 @@ export default {
     },
     random() {
       this.randomPlay({ list: this.songs })
+    },
+    handlePlay(playList) {
+      const height = playList.length > 0 ? '50vh' : ''
+      this.$refs.songList.style.height = height
     },
     ...mapActions(['selectPlay', 'randomPlay'])
   },
