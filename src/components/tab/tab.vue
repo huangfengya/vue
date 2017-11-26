@@ -22,7 +22,7 @@ export default {}
 <style lang="less">
 .tab {
   display: flex;
-  height: 44px;
+  height: 6vh;
   line-height: 44px;
   font-size: 14px;
   .tab-item {

@@ -13,3 +13,15 @@ export function getRank() {
 
   return Axios(url, param, 'GET')
 }
+
+export function getRankList(id) {
+  const url = 'qq/v8/fcg-bin/fcg_v8_toplist_cp.fcg'
+  const param = Object.assign({}, commonParams, {
+    tpl: 3,
+    page: 'detail',
+    type: 'top',
+    topid: id
+  })
+
+  return Axios(url, param, 'GET')
+}

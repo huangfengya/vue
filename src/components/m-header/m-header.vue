@@ -22,7 +22,7 @@ export default {}
 
 .m-header {
   position: relative;
-  height: 44px;
+  height: 6vh;
   text-align: center;
   color: rgba(255, 205, 49, 0.5);
   font-size: 0px;

@@ -10,7 +10,6 @@
     <div class="songlist" ref="songList">
       <song-list :songs="songs" @select="selectItem"></song-list>
     </div>
-
   </div>
 </template>
 

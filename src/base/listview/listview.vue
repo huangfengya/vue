@@ -74,12 +74,12 @@ export default {
 
 <style lang="less">
 .listview {
-  width: 80%;
-  margin: 5%;
+  width: 70%;
+  padding: 5vh;
   overflow: hidden;
   .all {
     width: 86vw;
-    height: 81vh;
+    height: 78vh;
     overflow-x: scroll;
     li {
       h2 {
