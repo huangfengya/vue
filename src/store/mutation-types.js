@@ -13,3 +13,5 @@ export const SET_PLAY_MODE = 'SET_PLAY_MODE'
 export const SET_CUREEN_INDEX = 'SET_CUREEN_INDEX'
 
 export const SET_RANK_LIST = 'SET_RANK_LIST'
+
+export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'

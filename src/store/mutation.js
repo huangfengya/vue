@@ -24,6 +24,9 @@ const mutations = {
   },
   [types.SET_RANK_LIST](state, list) {
     state.rankList = list
+  },
+  [types.SET_SEARCH_HISTORY](state, history) {
+    state.searchHistory = history
   }
 }
 
