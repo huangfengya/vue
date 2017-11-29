@@ -39,7 +39,6 @@ export default {
       getRank().then(res => {
         if (res.data.code === ERR_OK) {
           this.topList = res.data.data.topList
-          console.log(res.data.data.topList)
         }
       }).catch(err => {
         console.log(err)
@@ -52,8 +51,8 @@ export default {
       this.setTopList(item)
     },
     handlePlay(playList) {
-      const height = playList.length > 0 ? '50vh' : ''
-      this.$refs.songList.style.height = height
+      const height = playList.length > 0 ? '73vh' : ''
+      this.$refs.rankShow.style.height = height
     },
     ...mapMutations({
       setTopList: 'SET_RANK_LIST'

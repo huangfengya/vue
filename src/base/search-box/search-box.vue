@@ -41,7 +41,7 @@ export default {
   box-sizing: border-box;
   width: 100%;
   padding: 0 6px;
-  height: 40px;
+  height: 6vh;
   background: #ededed;
   i {
     display: block;
