@@ -74,9 +74,6 @@ export default {
       margin: 0px 8px 16px 0;
     }
   }
-  .search-res{
-    height: 82vh;
-  }
 }
 </style>
 

@@ -1,11 +1,11 @@
 <template>
-  <div class="suggest">
+  <div class="suggest" v-show="result.length" ref="nimei">
     <ul class="suggest-list">
       <li class="suggest-item" v-for="item in result">
-        <div class="icon"><i :class="getIconClass(item)"></i></div>
-        <div class="name">
-          <p class="text" v-html="getDisplayName(item)"></p>
+        <div class="icon">
+          <i :class="getIconClass(item)"></i>
         </div>
+        <p class="name" v-html="getDisplayName(item)"></p>
       </li>
     </ul>
   </div>
@@ -15,10 +15,12 @@
 import { search } from 'api/search'
 import { ERR_OK } from 'api/config'
 import { filterSinger } from 'common/js/song'
+import { playListMixin } from 'common/js/mixin'
 
 const TYPE_SINGER = 'singer'
 
 export default {
+  mixins: [playListMixin],
   props: {
     query: {
       type: String,
@@ -64,6 +66,10 @@ export default {
       } else {
         return `${item.songname} - ${filterSinger(item.singer)}`
       }
+    },
+    handlePlay(playList) {
+      const height = playList.length > 0 ? '73vh' : ''
+      this.$refs.nimei.style.height = height
     }
   },
   watch: {
@@ -76,8 +82,9 @@ export default {
 
 <style lang="less" scoped>
 .suggest {
-  height: 100%;
-  overflow: hidden;
+  height: 82vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
   .suggest-list {
     padding: 0 30px;
     .suggest-item {
@@ -105,10 +112,10 @@ export default {
       font-size: 15px;
       color: #ff366d;
       overflow: hidden;
-      .text {
-      line-height: 40px;        
+
+      line-height: 40px;
+      text-overflow: ellipsis;
       white-space: nowrap;
-      }
     }
   }
 }
