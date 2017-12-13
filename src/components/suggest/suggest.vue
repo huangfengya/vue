@@ -34,14 +34,25 @@ export default {
   data() {
     return {
       page: 1,
-      result: []
+      result: [],
+      scroll: 0
     }
+  },
+  mounted() {
+    let suggest = document.getElementsByClassName('suggest')[0]
+    var athis = this
+    this.$nextTick(() => {
+      suggest.addEventListener('scroll', function() {
+        // console.log('scrolling')
+        athis.pullLoad()
+      })
+    })
   },
   methods: {
     _search() {
       search(this.query, this.page, this.showSinger).then(res => {
         if (res.code === ERR_OK) {
-          this.result = this._genResult(res.data)
+          this.result = this.result.concat(this._genResult(res.data))
         }
       }).catch(err => {
         console.log(err)
@@ -70,6 +81,17 @@ export default {
     handlePlay(playList) {
       const height = playList.length > 0 ? '73vh' : ''
       this.$refs.nimei.style.height = height
+    },
+    pullLoad() {
+      let suggest = document.getElementsByClassName('suggest')[0]
+      let listLen = suggest.scrollHeight
+      let listScroll = suggest.scrollTop + suggest.clientHeight
+
+      if (listLen < listScroll + 50) {
+        this.page ++
+        this._search()
+        console.log(this.page)
+      }
     }
   },
   watch: {
@@ -112,7 +134,6 @@ export default {
       font-size: 15px;
       color: #ff366d;
       overflow: hidden;
-
       line-height: 40px;
       text-overflow: ellipsis;
       white-space: nowrap;
