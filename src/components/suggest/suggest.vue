@@ -1,7 +1,7 @@
 <template>
   <div class="suggest" v-show="result.length" ref="nimei">
     <ul class="suggest-list">
-      <li class="suggest-item" v-for="item in result">
+      <li class="suggest-item" v-for="item in result" @click="playSong(item)">
         <div class="icon">
           <i :class="getIconClass(item)"></i>
         </div>
@@ -14,8 +14,10 @@
 <script>
 import { search } from 'api/search'
 import { ERR_OK } from 'api/config'
-import { filterSinger } from 'common/js/song'
+import { filterSinger, createSong } from 'common/js/song'
 import { playListMixin } from 'common/js/mixin'
+import { mapMutations, mapActions } from 'vuex'
+import Singer from 'common/js/singer'
 
 const TYPE_SINGER = 'singer'
 
@@ -35,14 +37,14 @@ export default {
     return {
       page: 1,
       result: [],
-      scroll: false
+      scroll: true
     }
   },
   mounted() {
     let suggest = document.getElementsByClassName('suggest')[0]
     var athis = this
     this.$nextTick(() => {
-      suggest.addEventListener('scroll', function () {
+      suggest.addEventListener('touchend', function () {
         athis.pullLoad()
       })
     })
@@ -52,7 +54,6 @@ export default {
       search(this.query, this.page, this.showSinger).then(res => {
         if (res.code === ERR_OK) {
           this.result = this._genResult(res.data)
-          this.scroll = true
         }
       }).catch(err => {
         console.log(err)
@@ -90,9 +91,38 @@ export default {
       if (listLen < listScroll + 50 && !(this.result / 21) && this.scroll) {
         this.scroll = false
         this.page++
-        this._search()
+        search(this.query, this.page, this.showSinger).then(res => {
+          if (res.code === ERR_OK) {
+            this.result = this.result.concat(this._genResult(res.data))
+            this.scroll = true
+          }
+        }).catch(err => {
+          console.log(err)
+        })
       }
-    }
+    },
+    playSong(item) {
+      if (item.type === TYPE_SINGER) {
+        let singer = new Singer({
+          id: item.singermid,
+          name: item.singername
+        })
+        this.setSinger(singer)
+        this.$router.push({
+          path: `/singer/${item.singermid}`
+        })
+      } else {
+        let song = [createSong(item)]
+        this.selectPlay({
+          list: song,
+          index: 0
+        })
+      }
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    }),
+    ...mapActions(['selectPlay'])
   },
   watch: {
     query() {
